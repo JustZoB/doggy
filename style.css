@@ -1,4 +1,3 @@
-@charset "UTF-8";
 html,
 body {
   width: 100%;
@@ -63,17 +62,26 @@ body {
   color: white;
   font-size: 20px;
   padding: 5px 10px;
-  margin: 5px 0;
+  margin: 5px;
   cursor: pointer;
+  text-align: center;
 }
 .buttons__block {
   text-align: center;
   padding-top: 20px;
 }
-.addImg {
-  position: relative;
-  left: 50%;
-  transform: translate(-50%, 0);
+.accoridon__block__buttons {
+  text-align: center;
+}
+.input_text {
+  background: #3face4;
+  border: 0;
+  color: white;
+  font-size: 20px;
+  padding: 5px 10px;
+  margin: 5px;
+  text-align: center;
+  width: 35px;
 }
 
 @media (max-width: 550px) {
