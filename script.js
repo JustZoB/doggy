@@ -1,277 +1,145 @@
 $(document).ready(function() {
-  let doggys_list = [
-    "affenpinscher", 
-    "african",
-    "airedale",
-    "akita",
-    "appenzeller",
-    "basenji",
-    "beagle",
-    "bluetick",
-    "borzoi",
-    "bouvier",
-    "boxer",
-    "brabancon",
-    "briard",
-    "bulldog/boston",
-    "bulldog/english",
-    "bulldog/french",
-    "bullterrier/staffordshire",
-    "cairn",
-    "cattledog/australian",
-    "chihuahua",
-    "chow",
-    "clumber",
-    "cockapoo",
-    "collie/border",
-    "coonhound",
-    "corgi/cardigan",
-    "cotondetulear",
-    "dachshund",
-    "dalmatian",
-    "dane/great",
-    "deerhound/scottish",
-    "dhole",
-    "dingo",
-    "doberman",
-    "elkhound/norwegian",
-    "entlebucher",
-    "eskimo",
-    "frise/bichon",
-    "germanshepherd",
-    "greyhound/italian",
-    "groenendael",
-    "hound/afghan",
-    "hound/basset",
-    "hound/blood",
-    "hound/english",
-    "hound/ibizan",
-    "husky",
-    "keeshond",
-    "kelpie",
-    "komondor",
-    "kuvasz",
-    "labrador",
-    "leonberg",
-    "lhasa",
-    "malamute",
-    "malinois",
-    "maltese",
-    "mastiff/bull",
-    "mastiff/english",
-    "mastiff/tibetan",
-    "mexicanhairless",
-    "mix",
-    "mountain/bernese",
-    "mountain/swiss",
-    "newfoundland",
-    "otterhound",
-    "papillon",
-    "pekinese",
-    "pembroke",
-    "pinscher/miniature",
-    "pointer/german",
-    "pointer/germanlonghair",
-    "pomeranian",
-    "poodle/miniature",
-    "poodle/standard",
-    "poodle/toy",
-    "pug",
-    "puggle",
-    "pyrenees",
-    "redbone",
-    "retriever/chesapeake",
-    "retriever/curly",
-    "retriever/flatcoated",
-    "retriever/golden",
-    "ridgeback/rhodesian",
-    "rottweiler",
-    "saluki",
-    "samoyed",
-    "schipperke",
-    "schnauzer/giant",
-    "schnauzer/miniature",
-    "setter/english",
-    "setter/gordon",
-    "setter/irish",
-    "sheepdog/english",
-    "sheepdog/shetland",
-    "shiba",
-    "shihtzu",
-    "spaniel/blenheim",
-    "spaniel/brittany",
-    "spaniel/cocker",
-    "spaniel/irish",
-    "spaniel/japanese",
-    "spaniel/sussex",
-    "spaniel/welsh",
-    "springer/english",
-    "stbernard",
-    "terrier/american",
-    "terrier/australian",
-    "terrier/bedlington",
-    "terrier/border",
-    "terrier/dandie",
-    "terrier/fox",
-    "terrier/irish",
-    "terrier/kerryblue",
-    "terrier/lakeland",
-    "terrier/norfolk",
-    "terrier/norwich",
-    "terrier/patterdale",
-    "terrier/russell",
-    "terrier/scottish",
-    "terrier/sealyham",
-    "terrier/silky",
-    "terrier/tibetan",
-    "terrier/toy",
-    "terrier/westhighland",
-    "terrier/wheaten",
-    "terrier/yorkshire",
-    "vizsla",
-    "weimaraner",
-    "whippet",
-    "wolfhound/irish"
-  ]
-  getDoggysList("https://dog.ceo/api/breeds/list/all");
+  let doggys_list = getDoggysList("https://dog.ceo/api/breeds/list/all");
 
   function getDoggysList(link) {
     let xhr = new XMLHttpRequest();
+    let doggys_list = [];
     xhr.open('GET', link, false);
     xhr.send();
-    let lss = JSON.parse(xhr.responseText);
-    //alert( lss.message );
+    let DoggysList = JSON.parse(xhr.responseText);
+    for (key in DoggysList.message) {
+      if (DoggysList.message[key] == "") {
+        doggys_list.push(key);
+      } else {
+        for (key_breed in DoggysList.message[key]) {
+          doggys_list.push(key + "/" + DoggysList.message[key][key_breed])
+        }
+      }
+    }
+    return doggys_list;
   }
 
+  // События для кнопок
+  $("#create-accordion").on( "click", function() {
+    createAccordion();
+  });
+  $("body").on( "click", ".create-block", function() {
+    createBlocks($(this).attr("data-input-ac-id"));
+  });
+  $("body").on( "click", ".addImg", function() {
+    addImg($(this).attr("data-input-ac-id"), $(this).attr("data-input-add-id"), $(this).attr("data-doggy"));
+  });
+  $("body").on( "click", ".removeBlock", function() {
+    removeBlock($(this).attr("data-input-remove-id"), $(this).attr("data-doggy"));
+  });
 
-  let accordion = $(".accordion");
-  let ul = accordion.find("ul");
+  let container = $(".container");
+  let ac_count = -1;
   let id = 0;
-  let key = 0;
-  let doggys = [];
 
-  for (let i = 0; i < 4; i++) {
-    createBlock();
+  createAccordion();
+  for (let i = 0; i < 3; i++) {
+    createBlock(ac_count);
   }
 
-  $("#create").on( "click", function() {
-    createBlocks();
-  });
-  $("#remove").on( "click", function() {
-    removeBlock();
-  });
+  function createAccordion() {
+    ac_count++;
+    
+    container.append("<div data-ac-id='" + ac_count + 
+    "'><div class='buttons__block'><input data-input-ac-id='" + ac_count + 
+    "' type='button' value='Создать блоков' class='button create-block'>" +
+    "<input type='text' value='1' class='input_text'></div><div class='accordion'><ul></ul></div></div>");
 
-  function createBlocks() {
+    createBlock(ac_count);
+  }
+
+  function createBlocks(ac_id) {
+    let currunt_ac = container.find("[data-ac-id='" + ac_id)
     let countCreate = 0;
-    let inputValue = $(".input_text").val();
+    let inputValue = currunt_ac.find(".input_text").val();
     if (!isNaN(inputValue)) countCreate = inputValue;
     for (let i = 0; i < countCreate; i++) {
-      createBlock();
+      createBlock(ac_id);
     }
   }
   
-  function createBlock() {
+  function createBlock(ac_id) {
     let newDoggy = doggys_list[Math.round(Math.random() * doggys_list.length)];
-    
-    doggys_list.splice( doggys_list.indexOf(newDoggy), 1 );
+    doggys_list.splice(doggys_list.indexOf(newDoggy), 1);
 
     let nameDoggy = newDoggy[0].toUpperCase() + newDoggy.slice(1);
     if (nameDoggy.indexOf("/") >= 1) {
-      nameDoggy = nameDoggy.substring(0, nameDoggy.indexOf("/")) + ' ' + nameDoggy.substr(nameDoggy.indexOf("/") + 1);
+      nameDoggy = nameDoggy.substring(0, nameDoggy.indexOf("/")) + 
+      ' ' + nameDoggy.substr(nameDoggy.indexOf("/") + 1);
     }
-    doggys[key] = {};
-    doggys[key].id = id;
-    doggys[key].link = newDoggy;
-    doggys[key].name = nameDoggy;
 
-    ul.append("<li id='" + doggys[key].id + 
-    "'><input type='checkbox' class='accordion_button'><i></i><h2>" +
-      doggys[key].name + "</h2><div class='panel'><div class='images'></div>" +
-     "<div class='accoridon__block__buttons'><input type='button' value='Добавить картинку' class='button addImg'>" +
-     "<input type='button' value='Убрать блок' id='remove' class='button removeBlock'></div></div></li>");
+    let currunt_ac = $("[data-ac-id='" + ac_id + "']");
+    let ul = currunt_ac.find("ul");
+    let li_id = id;
+    let input_id = "input_" + id;
+    
+    ul.append("<li data-id='" + li_id + 
+    "'><input id='" + input_id + "' name='accordion-" + ac_id + 
+    "' type='radio' class='accordion_button'" + 
+    "><i></i><label for='" + input_id + "'>" + nameDoggy + 
+    "</label><div class='panel'><div class='images'></div>" +
+     "<div class='accoridon__block__buttons'>" +
+     "<input data-input-ac-id='" + ac_id + "' data-input-add-id='" + li_id + 
+     "' data-doggy='" + newDoggy + 
+     "' type='button' value='Добавить картинку' class='button addImg'>" +
+     "<input data-input-remove-id='" + li_id + "' data-doggy='" + newDoggy + 
+     "' type='button' value='Убрать блок' class='button removeBlock'>" + 
+     "</div></div></li>");
 
-    getRandomImage("https://dog.ceo/api/breed/" + doggys[key].link + "/images/random", doggys[key].id);
-  
-    let button__addImg = ul.find("#" + doggys[key].id + " .addImg");
-    button__addImg.on( "click", function() {
-      addImg($(this).parent().parent().parent().attr("id"));
-    });
-    let button__removeBlock = ul.find("#" + doggys[key].id + " .removeBlock");
-    button__removeBlock.on( "click", function() {
-      removeBlock($(this).parent().parent().parent().attr("id"));
-    });
-    $(".accordion_button").unbind("click").on( "click", function() {
-      toggleAccordion($(this).parent().attr("id"));
-    });
+    getRandomImage(id, "https://dog.ceo/api/breed/" + newDoggy + "/images/random");
+
     id++;
-    key++;
   }
 
-  function findKey(thisId) { 
-    let i = 0;
-    let thisKey = 0;
-    doggys.forEach(element => {
-      if (element.id == thisId) {
-        thisKey = i;
-      }
-      i++;
-    });
-    return thisKey;
-  }
-
-  function addImg(thisId) {
+  function addImg(thisAcId, thisId, thisDoggy) {
     let counts = 2;
-    let thisKey = 0;
-    thisKey = findKey(thisId);
-
-    counts = countImages(thisId, thisKey);
+    let position = 0;
+    position = findPosition(thisAcId, thisId);
+    counts = countImages(thisId, position);
     for (let i = 0; i < counts; i++) {
-      getRandomImage("https://dog.ceo/api/breed/" + 
-      doggys[thisKey].link + 
-      "/images/random", thisId);
+      getRandomImage(thisId, "https://dog.ceo/api/breed/" + thisDoggy + "/images/random");
     }
+  }
+
+  function removeBlock(thisId, thisDoggy) {
+    container.find("[data-id='" + thisId + "']").remove();
+    doggys_list.push(thisDoggy);
+  }
+
+  function findPosition(thisAcId, thisId) { 
+    let thisAc = $("[data-ac-id='" + thisAcId + "']");
+    let thisLis = thisAc.find("li");
+    let thisLi = thisAc.find("[data-id='" + thisId + "']");
+    let pos = 0;
+    pos = thisLis.index(thisLi);
+    return pos;
   }
 
   function countImages(thisId, position) {
-    let thisLi = $("#" + thisId);
+    let thisLi = $("[data-input-add-id='" + thisId + "']");
     let thisButton = thisLi.find(".addImg");
+    counts = 2;
     if (!thisButton.hasClass("active")) {
       counts = (+position + 1) * 2;
-    } else {
-      counts = 2;
     }
     if (!thisButton.hasClass("active")) {
-      thisButton.toggleClass("active");
+      thisButton.addClass("active");
     }
     return counts;
   }
 
-  function removeBlock(thisId) {
-    ul.find("#" + (thisId)).remove();
-    thisKey = findKey(thisId);
-    doggys_list.push(doggys[thisKey].link);
-    doggys.splice(thisId, 1);
-    key--;
-  }
-
-  function toggleAccordion(thisId) {
-    let thisLi = $("#" + thisId);
-    let panel = thisLi.find(".panel");
-    if (panel.hasClass("active")) {
-      panel.css({'display' : 'none'});
-    } else {
-      panel.css({'display' : 'block'});
-    }
-    panel.toggleClass("active");
-  }
-
-  function getRandomImage(link, thisId) {
+  function getRandomImage(thisId, link) {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', link, false);
     xhr.send();
     let obj = JSON.parse(xhr.responseText);
-    let newLi = ul.find("#" + thisId);
-    let blockImages = newLi.find(".images");
+    let thisLi = container.find("[data-id='" + thisId + "']");
+    let blockImages = thisLi.find(".images");
     blockImages.append("<img src='" + obj.message +"'>");
   }
 });
