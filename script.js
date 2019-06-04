@@ -121,7 +121,7 @@ $(document).ready(function() {
   }
 
   function countImages(thisId, position) {
-    let thisLi = $("[data-input-add-id='" + thisId + "']");
+    let thisLi = $("[data-id='" + thisId + "']");
     let thisButton = thisLi.find(".addImg");
     counts = 2;
     if (!thisButton.hasClass("active")) {
