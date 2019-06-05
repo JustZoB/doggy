@@ -101,50 +101,50 @@ $(document).ready(function() {
     id++;
   }
 
-  function addImg(thisAcId, thisId, thisDoggy) {
+  function addImg(ac_id, id, doggy) {
     let counts = 2;
     let position = 0;
-    position = findPosition(thisAcId, thisId);
-    counts = countImages(thisId, position);
+    position = findPosition(ac_id, id);
+    counts = countImages(id, position);
     for (let i = 0; i < counts; i++) {
-      getRandomImage(thisId, "https://dog.ceo/api/breed/" + thisDoggy + "/images/random");
+      getRandomImage(id, "https://dog.ceo/api/breed/" + doggy + "/images/random");
     }
   }
 
-  function removeBlock(thisId, thisDoggy) {
-    container.find("[data-id='" + thisId + "']").remove();
-    doggys_list.push(thisDoggy);
+  function removeBlock(id, doggy) {
+    container.find("[data-id='" + id + "']").remove();
+    doggys_list.push(doggy);
   }
 
-  function findPosition(thisAcId, thisId) { 
-    let thisAc = $("[data-ac-id='" + thisAcId + "']");
-    let thisLis = thisAc.find("li");
-    let thisLi = thisAc.find("[data-id='" + thisId + "']");
+  function findPosition(ac_id, id) { 
+    let ac = $("[data-ac-id='" + ac_id + "']");
+    let lis = ac.find("li");
+    let li = ac.find("[data-id='" + id + "']");
     let pos = 0;
-    pos = thisLis.index(thisLi);
+    pos = lis.index(li);
     return pos;
   }
 
-  function countImages(thisId, position) {
-    let thisLi = $("[data-id='" + thisId + "']");
-    let thisButton = thisLi.find(".addImg");
+  function countImages(id, position) {
+    let li = $("[data-id='" + id + "']");
+    let button = li.find(".addImg");
     counts = 2;
-    if (!thisButton.hasClass("active")) {
+    if (!button.hasClass("active")) {
       counts = (position + 1) * 2;
     }
-    if (!thisButton.hasClass("active")) {
-      thisButton.addClass("active");
+    if (!button.hasClass("active")) {
+      button.addClass("active");
     }
     return counts;
   }
 
-  function getRandomImage(thisId, link) {
+  function getRandomImage(id, link) {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', link, false);
     xhr.send();
     let obj = JSON.parse(xhr.responseText);
-    let thisLi = container.find("[data-id='" + thisId + "']");
-    let blockImages = thisLi.find(".images");
+    let li = container.find("[data-id='" + id + "']");
+    let blockImages = li.find(".images");
     blockImages.append("<img src='" + obj.message +"'>");
   }
 });
