@@ -27,8 +27,7 @@ $(document).ready(function() {
     createBlocks($(this).parents().eq(1).attr("data-ac-id"));
   });
   $("body").on( "click", ".addImg", function() {
-    addImg($(this).parents().eq(5).attr("data-ac-id"),
-     $(this).parents().eq(2).attr("data-id"), $(this).attr("data-doggy"));
+    addImg($(this).parents().eq(4), $(this).parents().eq(2).attr("data-id"), $(this).attr("data-doggy"));
   });
   $("body").on( "click", ".removeBlock", function() {
     removeBlock($(this).parents().eq(2).attr("data-id"), $(this).attr("data-doggy"));
