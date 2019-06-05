@@ -24,13 +24,14 @@ $(document).ready(function() {
     createAccordion();
   });
   $("body").on( "click", ".create-block", function() {
-    createBlocks($(this).attr("data-input-ac-id"));
+    createBlocks($(this).parents().eq(1).attr("data-ac-id"));
   });
   $("body").on( "click", ".addImg", function() {
-    addImg($(this).attr("data-input-ac-id"), $(this).attr("data-input-add-id"), $(this).attr("data-doggy"));
+    addImg($(this).parents().eq(5).attr("data-ac-id"),
+     $(this).parents().eq(2).attr("data-id"), $(this).attr("data-doggy"));
   });
   $("body").on( "click", ".removeBlock", function() {
-    removeBlock($(this).attr("data-input-remove-id"), $(this).attr("data-doggy"));
+    removeBlock($(this).parents().eq(2).attr("data-id"), $(this).attr("data-doggy"));
   });
 
   let container = $(".container");
@@ -92,8 +93,8 @@ $(document).ready(function() {
     panel.append("<div class='images'></div>");
     panel.append("<div class='accoridon__block__buttons'></div>");
     let ac_block_buttons = panel.find(".accoridon__block__buttons");
-    ac_block_buttons.append("<input data-input-ac-id='" + ac_id + "' data-input-add-id='" + li_id + "' data-doggy='" + newDoggy + "' type='button' value='Добавить картинку' class='button addImg'>");
-    ac_block_buttons.append("<input data-input-remove-id='" + li_id + "' data-doggy='" + newDoggy + "' type='button' value='Убрать блок' class='button removeBlock'>");
+    ac_block_buttons.append("<input data-doggy='" + newDoggy + "' type='button' value='Добавить картинку' class='button addImg'>");
+    ac_block_buttons.append("<input data-doggy='" + newDoggy + "' type='button' value='Убрать блок' class='button removeBlock'>");
 
     getRandomImage(id, "https://dog.ceo/api/breed/" + newDoggy + "/images/random");
 
