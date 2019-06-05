@@ -44,13 +44,17 @@ $(document).ready(function() {
 
   function createAccordion() {
     ac_count++;
-    
-    container.append("<div data-ac-id='" + ac_count + 
-    "'><div class='buttons__block'><input data-input-ac-id='" + ac_count + 
-    "' type='button' value='Создать блоков' class='button create-block'>" +
-    "<input type='text' value='1' class='input_text'></div><div class='accordion'><ul></ul></div></div>");
+
+    container.append("<div data-ac-id='" + ac_count + "'></div");
+    let newAc = container.find("[data-ac-id=" + ac_count +"]");
+    newAc.append("<div class='buttons__block'></div>");
+    let buttons__block = newAc.find(".buttons__block");
+    buttons__block.append("<input data-input-ac-id='" + ac_count + "' type='button' value='Создать блоков' class='button create-block'>");
+    buttons__block.append("<input type='text' value='1' class='input_text'>");
+    newAc.append("<div class='accordion'><ul></ul></div>");
 
     createBlock(ac_count);
+    
   }
 
   function createBlocks(ac_id) {
@@ -78,18 +82,18 @@ $(document).ready(function() {
     let li_id = id;
     let input_id = "input_" + id;
     
-    ul.append("<li data-id='" + li_id + 
-    "'><input id='" + input_id + "' name='accordion-" + ac_id + 
-    "' type='radio' class='accordion_button'" + 
-    "><i></i><label for='" + input_id + "'>" + nameDoggy + 
-    "</label><div class='panel'><div class='images'></div>" +
-     "<div class='accoridon__block__buttons'>" +
-     "<input data-input-ac-id='" + ac_id + "' data-input-add-id='" + li_id + 
-     "' data-doggy='" + newDoggy + 
-     "' type='button' value='Добавить картинку' class='button addImg'>" +
-     "<input data-input-remove-id='" + li_id + "' data-doggy='" + newDoggy + 
-     "' type='button' value='Убрать блок' class='button removeBlock'>" + 
-     "</div></div></li>");
+    ul.append("<li data-id='" + li_id + "'></li>");
+    let li = ul.find("[data-id=" + li_id +"]");
+    li.append("<input id='" + input_id + "' name='accordion-" + ac_id + "' type='radio' class='accordion_button'>");
+    li.append("<i></i>");
+    li.append("<label for='" + input_id + "'>" + nameDoggy + "</label>");
+    li.append("<div class='panel'></div>");
+    let panel = li.find(".panel");
+    panel.append("<div class='images'></div>");
+    panel.append("<div class='accoridon__block__buttons'></div>");
+    let ac_block_buttons = panel.find(".accoridon__block__buttons");
+    ac_block_buttons.append("<input data-input-ac-id='" + ac_id + "' data-input-add-id='" + li_id + "' data-doggy='" + newDoggy + "' type='button' value='Добавить картинку' class='button addImg'>");
+    ac_block_buttons.append("<input data-input-remove-id='" + li_id + "' data-doggy='" + newDoggy + "' type='button' value='Убрать блок' class='button removeBlock'>");
 
     getRandomImage(id, "https://dog.ceo/api/breed/" + newDoggy + "/images/random");
 
@@ -125,7 +129,7 @@ $(document).ready(function() {
     let thisButton = thisLi.find(".addImg");
     counts = 2;
     if (!thisButton.hasClass("active")) {
-      counts = (+position + 1) * 2;
+      counts = (position + 1) * 2;
     }
     if (!thisButton.hasClass("active")) {
       thisButton.addClass("active");
