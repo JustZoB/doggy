@@ -19,9 +19,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     return doggys_list;
   }
   //localStorage.clear();
-
-  // События для кнопок
-
   
   document.getElementById('create-accordion').onclick = function() {
     createAccordion();
@@ -42,16 +39,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
       removeBlock(e.target.parentElement.parentElement.parentElement.getAttribute("data-id"), e.target.getAttribute("data-doggy"));
      }
   });
-  /*$("body").on( "click", ".create-block", function() {
-    createBlocks($(this).parents().eq(1).attr("data-ac-id"));
-  });
-  $("body").on( "click", ".addImg", function() {
-    addImg($(this).parents().eq(5).attr("data-ac-id"),
-     $(this).parents().eq(2).attr("data-id"), $(this).attr("data-doggy"));
-  });
-  $("body").on( "click", ".removeBlock", function() {
-    removeBlock($(this).parents().eq(2).attr("data-id"), $(this).attr("data-doggy"));
-  });*/
   
   let container = document.querySelector(".container");
   let ac_count = -1;
