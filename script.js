@@ -22,10 +22,27 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   // События для кнопок
 
+  
   document.getElementById('create-accordion').onclick = function() {
     createAccordion();
   };
-  $("body").on( "click", ".create-block", function() {
+  document.addEventListener('click',function(e){
+    if(e.target && e.target.classList.contains('create-block')){
+      createBlocks(e.target.parentElement.parentElement.getAttribute("data-ac-id"));
+     }
+  });
+  document.addEventListener('click',function(e){
+    if(e.target && e.target.classList.contains('addImg')){
+      addImg(e.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.getAttribute("data-ac-id"),
+      e.target.parentElement.parentElement.parentElement.getAttribute("data-id"), e.target.getAttribute("data-doggy"));
+     }
+  });
+  document.addEventListener('click',function(e){
+    if(e.target && e.target.classList.contains('removeBlock')){
+      removeBlock(e.target.parentElement.parentElement.parentElement.getAttribute("data-id"), e.target.getAttribute("data-doggy"));
+     }
+  });
+  /*$("body").on( "click", ".create-block", function() {
     createBlocks($(this).parents().eq(1).attr("data-ac-id"));
   });
   $("body").on( "click", ".addImg", function() {
@@ -34,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   });
   $("body").on( "click", ".removeBlock", function() {
     removeBlock($(this).parents().eq(2).attr("data-id"), $(this).attr("data-doggy"));
-  });
+  });*/
   
   let container = document.querySelector(".container");
   let ac_count = -1;
