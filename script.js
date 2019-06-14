@@ -84,15 +84,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
         }
       }
     }
-  }else{
-    createAccordion();
-    for (let i = 0; i < 3; i++) {
-      createBlock(ac_count);
-    }
+  } else {
+      createAccordion();
+      for (let i = 0; i < 3; i++) {
+        createBlock(ac_count);
+      }
   }
 
-  
-  
   function createAccordion() {
     ac_count++;
     localStorage.setItem("ac_count", ac_count);
