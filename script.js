@@ -19,16 +19,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
     return doggys_list;
   }
   //localStorage.clear();
+
   // События для кнопок
+
   document.getElementById('create-accordion').onclick = function() {
     createAccordion();
   };
-
-  /*document.querySelectorAll(".create-block").addEventListener('click', function() {
-    createBlocks();
-  });*/
-
-  //-----------------------------------//
   $("body").on( "click", ".create-block", function() {
     createBlocks($(this).parents().eq(1).attr("data-ac-id"));
   });
@@ -39,8 +35,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
   $("body").on( "click", ".removeBlock", function() {
     removeBlock($(this).parents().eq(2).attr("data-id"), $(this).attr("data-doggy"));
   });
-  //-------------------------//
-  let container = $(".container"); //------------
+  
+  let container = document.querySelector(".container");
   let ac_count = -1;
   let id = 0;
   let c = 0;
@@ -80,23 +76,30 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
 
   function htmlAccordion(ac_id) {
-    container.append("<div data-ac-id='" + ac_id + "'></div");
-    let newAc = container.find("[data-ac-id=" + ac_id +"]");
-    newAc.append("<div class='buttons__block'></div>");
-    let buttons__block = newAc.find(".buttons__block");
-    buttons__block.append("<input data-input-ac-id='" + ac_id + "' type='button' value='Создать блоков' class='button create-block'>");
-    buttons__block.append("<input type='text' value='1' class='input_text'>");
-    newAc.append("<div class='accordion'><ul></ul></div>");
-  }
+    let divAc = document.createElement('div');
+    divAc.setAttribute('data-ac-id', ac_id);
+    let buttonBlock = document.createElement('div');
+    buttonBlock.classList.add('buttons__block');
+    divAc.appendChild(buttonBlock);
+    let createButton = document.createElement('input');
+    createButton.setAttribute('data-input-ac-id', ac_id);
+    createButton.setAttribute('type', 'button');
+    createButton.setAttribute('value', 'Создать блоков');
+    createButton.classList.add('button');
+    createButton.classList.add('create-block');
+    buttonBlock.appendChild(createButton);
+    let textButton = document.createElement('input');
+    textButton.setAttribute('type', 'text');
+    textButton.setAttribute('value', '1');
+    textButton.classList.add('input_text');
+    buttonBlock.appendChild(textButton);
+    let accoridonBlock = document.createElement('div');
+    accoridonBlock.classList.add('accordion');
+    let ulAccordion = document.createElement('ul');
+    accoridonBlock.appendChild(ulAccordion);
 
-  function createBlocks(ac_id) {
-    let currunt_ac = container.find("[data-ac-id='" + ac_id + "']");
-    let countCreate = 0;
-    let inputValue = currunt_ac.find(".input_text").val();
-    if (!isNaN(inputValue)) countCreate = inputValue;
-    for (let i = 0; i < countCreate; i++) {
-      createBlock(ac_id);
-    }
+    divAc.appendChild(accoridonBlock);
+    container.appendChild(divAc);
   }
 
   function createLocalBlock(ac_id, newDoggy, images) {
@@ -109,14 +112,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     htmlBlock(ac_id, nameDoggy, newDoggy);
 
-    let currunt_ac = container.find("[data-ac-id='" + ac_id + "']");
-    let ul = currunt_ac.find("ul");
-    let li_id = id;
-    let li = ul.find("[data-id=" + li_id +"]");
-     
+    
+    let li = document.querySelector("[data-id='" + id +"']");
+    let blockImages = li.querySelector(".images");
+
     for (let i = 0; i < images.length; i++) {
-      let blockImages = li.find(".images");
-      blockImages.append("<img src='" + images[i] +"'>");
+      let newImage = document.createElement('img');
+      newImage.setAttribute('src', images[i]);
+      blockImages.appendChild(newImage);
     }
 
     id++;
@@ -146,61 +149,107 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
 
   function htmlBlock(ac_id, nameDoggy, newDoggy) {
-    let currunt_ac = container.find("[data-ac-id='" + ac_id + "']");
-    let ul = currunt_ac.find("ul");
+    let currunt_ac = document.querySelector("[data-ac-id='" + ac_id + "']")
+    let ul = currunt_ac.querySelector("ul");
     let li_id = id;
     let input_id = "input_" + id;
+
+    let li = document.createElement('li');
+    li.setAttribute('data-id', li_id);
+
+    let accordionRadio = document.createElement('input');
+    accordionRadio.setAttribute('id', input_id);
+    accordionRadio.setAttribute('type', 'radio');
+    accordionRadio.setAttribute('name', 'accordion-' + ac_id);
+    accordionRadio.classList.add('accordion_button');
+    let accordionI = document.createElement('i');
+    let accordionLabel = document.createElement('label');
+    accordionLabel.setAttribute('for', input_id);
+    accordionLabel.innerHTML = nameDoggy;
+    let accordionPanel = document.createElement('div');
+    accordionPanel.classList.add('panel');
+
+    let panelImages = document.createElement('div');
+    panelImages.classList.add('images');
+    let panelButtonsBlock = document.createElement('div');
+    panelButtonsBlock.classList.add('accoridon__block__buttons');
+
+    let panelButtonAdd = document.createElement('input');
+    panelButtonAdd.setAttribute('data-doggy', newDoggy);
+    panelButtonAdd.setAttribute('type', 'button');
+    panelButtonAdd.setAttribute('value', 'Добавить картинку');
+    panelButtonAdd.classList.add('button');
+    panelButtonAdd.classList.add('addImg');
+    let panelButtonRemove = document.createElement('input');
+    panelButtonRemove.setAttribute('data-doggy', newDoggy);
+    panelButtonRemove.setAttribute('type', 'button');
+    panelButtonRemove.setAttribute('value', 'Убрать блок');
+    panelButtonRemove.classList.add('button');
+    panelButtonRemove.classList.add('removeBlock');
+
+    panelButtonsBlock.appendChild(panelButtonAdd);
+    panelButtonsBlock.appendChild(panelButtonRemove);
+
+    accordionPanel.appendChild(panelImages);
+    accordionPanel.appendChild(panelButtonsBlock);
     
-    ul.append("<li data-id='" + li_id + "'></li>");
-    let li = ul.find("[data-id=" + li_id +"]");
-    li.append("<input id='" + input_id + "' name='accordion-" + ac_id + "' type='radio' class='accordion_button'>");
-    li.append("<i></i>");
-    li.append("<label for='" + input_id + "'>" + nameDoggy + "</label>");
-    li.append("<div class='panel'></div>");
-    let panel = li.find(".panel");
-    panel.append("<div class='images'></div>");
-    panel.append("<div class='accoridon__block__buttons'></div>");
-    let ac_block_buttons = panel.find(".accoridon__block__buttons");
-    ac_block_buttons.append("<input data-doggy='" + newDoggy + "' type='button' value='Добавить картинку' class='button addImg'>");
-    ac_block_buttons.append("<input data-doggy='" + newDoggy + "' type='button' value='Убрать блок' class='button removeBlock'>");
+    li.appendChild(accordionRadio);
+    li.appendChild(accordionI);
+    li.appendChild(accordionLabel);
+    li.appendChild(accordionPanel);
+    ul.appendChild(li);
+  }
+
+  function createBlocks(ac_id) {
+    let currunt_ac = document.querySelector("[data-ac-id='" + ac_id + "']");
+    let countCreate = 0;
+    let inputValue = currunt_ac.querySelector(".input_text").value;
+    if (!isNaN(inputValue)) countCreate = inputValue;
+    for (let i = 0; i < countCreate; i++) {
+      createBlock(ac_id);
+    }
   }
 
   function addImg(ac_id, id, doggy) {
-    let counts = 2;
-    let position = 0;
+    let counts = 2, position = 0;
     let newImagesForDoggy = JSON.parse(localStorage.getItem(doggy));
     position = findPosition(ac_id, id);
     counts = countImages(id, position);
     for (let i = 0; i < counts; i++) {
-      newImagesForDoggy.images.push(getRandomImage(id, "https://dog.ceo/api/breed/" + doggy + "/images/random")); //
+      newImagesForDoggy.images.push(getRandomImage(id, "https://dog.ceo/api/breed/" + doggy + "/images/random"));
     }
     localStorage.setItem(doggy, JSON.stringify(newImagesForDoggy));
   }
 
   function removeBlock(id, doggy) {
-    container.find("[data-id='" + id + "']").remove();
+    document.querySelector("[data-id='" + id + "']").remove();
     localStorage.removeItem(doggy);
     doggys_list.push(doggy);
   }
 
   function findPosition(ac_id, id) { 
-    let ac = container.find("[data-ac-id='" + ac_id + "']");
-    let lis = ac.find("li");
-    let li = ac.find("[data-id='" + id + "']");
+    let ac = document.querySelector("[data-ac-id='" + ac_id + "']");
+    let lis = ac.querySelectorAll("li");
+    let li = ac.querySelector("[data-id='" + id + "']");
+    let dataId = li.getAttribute("data-id");
     let pos = 0;
-    pos = lis.index(li);
+    for (let i = 0; i < lis.length; i++) {
+      if (lis[i].getAttribute("data-id") == dataId) {
+        pos = i;
+      }
+    }
     return pos;
   }
 
   function countImages(id, position) {
-    let li = container.find("[data-id='" + id + "']");
-    let button = li.find(".addImg");
+    let li = document.querySelector("[data-id='" + id + "']");
+    let button = li.querySelector(".addImg");
     counts = 2;
-    if (!button.hasClass("active")) {
+    if (!button.classList.contains("active")) {
       counts = (position + 1) * 2;
     }
-    if (!button.hasClass("active")) {
-      button.addClass("active");
+    if (!button.classList.contains("active")) {
+      button.classList.add("active");
     }
     return counts;
   }
@@ -210,9 +259,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
     xhr.open('GET', link, false);
     xhr.send();
     let obj = JSON.parse(xhr.responseText);
-    let li = container.find("[data-id='" + id + "']");
-    let blockImages = li.find(".images");
-    blockImages.append("<img src='" + obj.message +"'>");
+    let li = document.querySelector("[data-id='" + id + "']");
+    let blockImages = li.querySelector(".images");
+    let newImage = document.createElement('img');
+    newImage.setAttribute('src', obj.message);
+    blockImages.appendChild(newImage);
     return obj.message;
   }
 });
