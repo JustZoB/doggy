@@ -44,33 +44,54 @@ document.addEventListener("DOMContentLoaded", function(event) {
   let ac_count = -1;
   let id = 0;
   let c = 0;
-  if (localStorage.length == 0) {
+
+  function lsTest(){
+    var test = 'test';
+    try {
+      localStorage.setItem(test, test);
+      localStorage.removeItem(test);
+      return true;
+    } catch(e) {
+      return false;
+    }
+  }
+
+  if(lsTest() === true){
+    if (localStorage.length == 0) {
+      createAccordion();
+      for (let i = 0; i < 3; i++) {
+        createBlock(ac_count);
+      }
+    } else {
+      for (let key in localStorage) {
+        if (key == "ac_count") {
+          for (let i = 0; i <= localStorage[key]; i++) {
+            htmlAccordion(i);
+          }
+          ac_count = localStorage[key];
+        } 
+      }
+      for (let key in localStorage) {
+        if (c < localStorage.length) {
+          let newImagesForDoggy = JSON.parse(localStorage.getItem(key));
+          if (newImagesForDoggy.ac != undefined) {
+            let ac = newImagesForDoggy.ac;
+            let name = newImagesForDoggy.name;
+            let images = newImagesForDoggy.images;
+            createLocalBlock(ac, name, images);
+          }
+          c++;
+        }
+      }
+    }
+  }else{
     createAccordion();
     for (let i = 0; i < 3; i++) {
       createBlock(ac_count);
     }
-  } else {
-    for (let key in localStorage) {
-      if (key == "ac_count") {
-        for (let i = 0; i <= localStorage[key]; i++) {
-          htmlAccordion(i);
-        }
-        ac_count = localStorage[key];
-      } 
-    }
-    for (let key in localStorage) {
-      if (c < localStorage.length) {
-        let newImagesForDoggy = JSON.parse(localStorage.getItem(key));
-        if (newImagesForDoggy.ac != undefined) {
-          let ac = newImagesForDoggy.ac;
-          let name = newImagesForDoggy.name;
-          let images = newImagesForDoggy.images;
-          createLocalBlock(ac, name, images);
-        }
-        c++;
-      }
-    }
   }
+
+  
   
   function createAccordion() {
     ac_count++;
